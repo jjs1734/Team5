@@ -1,42 +1,64 @@
 package com.team5.dao;
+//로그인, 회원가입, 회원탈퇴, 회원정보
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.security.auth.message.callback.PrivateKeyCallback.Request;
-import javax.servlet.RequestDispatcher;
+import com.team5.db.DBConnection;
+import com.team5.dto.MemberDTO;
 
-import org.mariadb.jdbc.export.Prepare;
-
-import com.poseidon.dto.MemberDTO;
-
-//로그인, 회원가입, 회원탈퇴, 회원정보
 public class MemberDAO  {
-
-	public MemberDTO list()) {
-		Connection con = db.getConnection();
+	
+	DBConnection db = DBConnection.getInstance();
+	
+	public void close(Connection con, PreparedStatement pstmt, ResultSet rs) {
+			try {
+				if(con != null) {
+					con.close();
+				}
+				if(pstmt!=null) {
+					pstmt.close();
+				}
+				if(rs!=null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+	}
+	
+	public List<MemberDTO> list(){
+		List<MemberDTO> result = new ArrayList<MemberDTO>();
+		
+		Connection conn = db.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
-		String sql = "SELECT count(*) FROM member";
+		String sql = "SELECT * FROM member";
 		try {
-			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, dto.getMid());
-			pstmt.setString(2, dto.getMpw());
-
+			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
-			if (rs.next()) {
-				dto.setCount(rs.getInt("count"));
-				dto.setMname(rs.getString("mname"));
+			while(rs.next()) {
+				MemberDTO d = new MemberDTO();
+				d.setMno(rs.getInt(1));
+				d.setMid(rs.getString(2));
+				d.setMpw(rs.getString(3));
+				d.setMname(rs.getString(4));
+				d.setMdate(rs.getString(5));
+				d.setMgrade(rs.getInt(6));
+				result.add(d);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			close(rs, pstmt, con);
+			close(conn, pstmt, rs);
 		}
-
-		return dto;
+		
+		return result;
 	}
+
+}
