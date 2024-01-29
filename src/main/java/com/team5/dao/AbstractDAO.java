@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import com.team5.db.DBConnection;
 
 public class AbstractDAO {
-DBConnection db = DBConnection.getIntance();
+DBConnection db = DBConnection.getInstance();
 	
 	void close(ResultSet rs, PreparedStatement pstmt, Connection con) {
 		if(rs != null) {
