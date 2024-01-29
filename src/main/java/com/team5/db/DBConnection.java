@@ -21,8 +21,8 @@ public class DBConnection {
 			Class.forName("org.mariadb.jdbc.Driver");
 			String url = "jdbc:mariadb://db.program.city:3308/teamfive";
 			conn = DriverManager.getConnection(url, "teamfive", "01290129");
-			
-		} catch (ClassNotFoundException e) {
+		} catch (ClassNotFoundException e
+				) {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
